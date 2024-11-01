@@ -1,0 +1,396 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<title>Select the file you want to embed</title>
+	<style type="text/css">
+	html, body { font-family: 'Source Sans Pro', sans-serif !important; line-height: 1; -webkit-font-smoothing: antialiased; color: #2A343E; margin: 0 !important; padding: 0 !important; }
+	a:link, a:visited, a:hover, a:active { color: inherit !important; cursor: pointer; }
+	#collection_chooser { width: 160px; height: 600px; float: left; background: #fff; }
+	#collection_chooser span { cursor: pointer; display: block; font-size: 16px; text-decoration: none; padding: 13px 0 13px 40px; color: #1F2A35; background-repeat: no-repeat; background-position: 10px 15px; background-color: #FFF; -webkit-transition: background-color 150ms ease-in; -moz-transition: background-color 150ms ease-in; -o-transition: background-color 150ms ease-in; transition: background-color 150ms ease-in; }
+	#collection_chooser span.active { color: #FFF !important; background-color: #1F2A35 !important; }
+	#collection_chooser span:hover { background-color: #F0F5F9; }
+	span#collection-list-files { background-image: url(../images/collection-files.png); background-position: 10px 13px; border-bottom: 2px solid #273440; }
+	span#collection-list-podcasts, #list_podcasts li { background-image: url(../images/collection-podcasts.png); background-position: 10px 12px; }
+	span#collection-list-playlists, #list_playlists li { background-image: url(../images/collection-playlists.png); background-position: 10px 17px; }
+	span#collection-list-audiobars, #list_audiobars li { background-image: url(../images/collection-audiobars.png); background-position: 7px 16px; }
+	span#collection-list-splittests, #list_splittests li { background-image: url(../images/collection-splittests.png); background-position: 12px 14px; }
+	
+	#collection_chooser #collection-list-files.active { background-color: #0097ED; }
+	#collection-list-files.active, #list_podcasts li.current { background-image: url(../images/collection-files-active.png); }
+	#collection-list-podcasts.active, #list_podcasts li.current { background-image: url(../images/collection-podcasts-active.png); }
+	#collection-list-playlists.active, #list_playlists li.current { background-image: url(../images/collection-playlists-active.png); }
+	#collection-list-audiobars.active, #list_audiobars li.current { background-image: url(../images/collection-podcasts-active.png); }
+	#collection-list-splittests.active, #list_splittests li.current { background-image: url(../images/collection-podcasts-active.png); }
+	
+	.list_collections { border-left: 1px solid #ECEEEF; float: left; width: 219px; height: 600px; background: #fff; }
+	.list_collections ul { list-style: none; padding: 0; border-right: 1px solid #ECEEEF; margin: 0; }
+	.list_collections > ul { height: 600px; overflow-x: hidden; overflow-y: scroll; }
+	
+ .list_collections li[data-collection-id],
+	.list_collections li[data-folder-id] { position: relative; font-size: 14px; color: #1F2A35; font-weight: normal; overflow: auto; background: url(../images/folder.png) no-repeat 12px 15px; background-color: #FFF; -webkit-transition: background-color 150ms ease-in; -moz-transition: background-color 150ms ease-in; -o-transition: background-color 150ms ease-in; transition: background-color 150ms ease-in; }
+	.list_collections .subfolder { margin-left: 15px; }
+	.list_collections .collection-name { display: block; margin: 0; padding: 15px 40px 15px 40px; border: none; text-decoration: none; }
+	.list_collections li[data-collection-id]:hover, .list_collections li[data-folder-id]:hover { background-color: #F0F5F9; }
+	.list_collections li[data-collection-id].current,
+	.list_collections li[data-folder-id].current,
+	.list_collections li[data-collection-id].current:hover,
+	.list_collections li[data-folder-id].current:hover { background-color: #273440; color: #FFF; background-image: url(../images/folder-active.png); }
+	
+	.list_collections_full { width: 739px; }
+	.list_collections_full ul { border-right: 0; }
+	.list_collections_full li { border-bottom: 1px solid #E8ECF0; padding: 14px 150px 15px 40px; }
+	.list_collections_full input { position: absolute; right: 10px; top: 9px; }
+	.list_collections_full .collection-name { padding: 0; cursor: pointer; }
+	
+		#list_files { float: left; width: 520px; position: relative; overflow-y: scroll; overflow-x: hidden; height: 600px; background: #fff; }
+		#list_files p { padding: 0 10px; text-align: center; font-size: 14px; }
+	
+	.collection-row { border-bottom: 1px solid #E8ECF0; -webkit-transition: all 250ms ease-out; -moz-transition: all 250ms ease-out; -ms-transition: all 250ms ease-out; -o-transition: all 250ms ease-out; transition: all 250ms ease-out; }
+	.collection-row:hover { background-color: #F0F5F9; }
+	.collection-row-inner { height: 104px; position: relative; text-align: center; }
+	.collection-row-thumbnail { width: 105px; height: 105px; float: left; margin: 0 10px 0 0; }
+	.collection-row-thumbnail-image { width: 105px; height: 105px; display: block; }
+	.collection-row-name { text-align: center; font-size: 16px; padding: 15px 0 0 0; margin: 0 0 10px 0; height: 27px; }
+	.collection-row-name .wp_audello_insert_link { color: #1F2A35; width: 360px; display: inline-block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; line-height: 19px; }
+	
+	.controls { position: relative; height: 34px; border-top: 1px solid #DFDFDF; }
+	#cancel { position: absolute; top: 5px; left: 10px; }
+	#to { position: absolute; top: 5px; right: 10px; }
+	
+	body.audello-permissions-removepodcasts #collection-list-podcasts { display: none; }
+	body.audello-permissions-removeplaylists #collection-list-playlists { display: none; }
+	body.audello-permissions-removeaudiobars #collection-list-audiobars { display: none; }
+	body.audello-permissions-removesplittests #collection-list-splittests { display: none; }
+	body.audello-permissions-removefiles #collection-list-files { display: none; }
+	
+	body.audelloLite {  }
+	body.audelloLite #collection_chooser { display: none; }
+	body.audelloLite .list_collections { width: 220px; border-left: none; }
+	body.audelloLite #list_files { width: 680px; }
+	</style>
+	<script type="text/javascript" src="../../../../wp-includes/js/jquery/jquery.js?ver=327-1235"></script>
+	<script type="text/javascript" src="../../../../wp-includes/js/tinymce/tiny_mce_popup.js?ver=327-1235"></script>
+	<script type="text/javascript" src="wp-audello-remote.js?ver=9-1"></script>
+	<script type="text/javascript" src="../admin/scripts/phpjs.js"></script>
+	<script type="text/javascript" src="../admin/scripts/spinner.js"></script>
+	<script type="text/javascript">
+	function queryParameter(ji) {
+		hu = window.location.search.substring(1);
+		gy = hu.split("&");
+		for (i=0;i<gy.length;i++) {
+			ft = gy[i].split("=");
+			if (ft[0] == ji) {
+				return ft[1];
+			}
+		}
+	}
+	
+	jQuery(document).ready(function($) {
+		var isLite = tinyMCEPopup.getWindowArg('audello_lite');
+		var plugin_url = tinyMCEPopup.getWindowArg('plugin_url');
+		var audello_location = tinyMCEPopup.getWindowArg('audello_location');
+		var audello_username = tinyMCEPopup.getWindowArg('audello_username');
+		var audello_password = tinyMCEPopup.getWindowArg('audello_password');
+		var audello_api = audello_location+'/api.php';
+		var audello_permissions = tinyMCEPopup.getWindowArg('audello_permissions');
+		var current_folder = queryParameter('folder_id') || '0';
+		
+		if(!audello_permissions.isAdmin && audello_permissions.assigned_folders) {
+			current_folder = audello_permissions.assigned_folders[0];
+			if(!audello_permissions.perm_files) $(document.body).addClass('audello-permissions-removefiles');
+			if(!audello_permissions.perm_podcasts) $(document.body).addClass('audello-permissions-removepodcasts');
+			if(!audello_permissions.perm_playlists) $(document.body).addClass('audello-permissions-removeplaylists');
+			if(!audello_permissions.perm_audiobars) $(document.body).addClass('audello-permissions-removeaudiobars');
+			if(!audello_permissions.perm_splittests) $(document.body).addClass('audello-permissions-removesplittests');
+		}
+		
+		if(isLite) $(document.body).addClass('audelloLite');
+		
+		$(document.body).delegate('.wp_audello_insert_link, .collection-row input[type="button"]', 'click', function() {
+			var file_ref = $(this).parents('.collection-row').attr('data-file-id');
+			
+			$('#list_folders, #list_files').fadeTo(300, 0.2);
+			
+			$.ajax({
+				'url': audello_api,
+				'data': {'responseType': 'jsonp', 'method': 'files-embed-code', 'file_id': file_ref, 'username': audello_username, 'password': audello_password},
+				'dataType': 'jsonp',
+				'success': function(response) {
+					if(response.success == true) {
+						WPAudelloRemoteDialog.insert(response.embed_code, 'file', plugin_url);
+					} else {
+						alert('There has been an error!\r\r'+response.message);
+					}
+				},
+				'error': function() {
+					alert('Unfortunately the list of files could not be loaded. Please go to the Audello settings page to check your location, username and password and try again!');
+				}
+			});
+		});
+		
+		$(document.body).delegate('.list_collections_full .collection_name, .list_collections_full input[type="button"]', 'click', function() {
+			var collection_id = $(this).parents('li').attr('data-collection-id');
+			
+			$(this).parents('#list_collections_full').fadeTo(300, 0.2);
+			
+			$.ajax({
+				'url': audello_api,
+				'data': {'responseType': 'jsonp', 'method': 'collections-embed-code', 'collection_id': collection_id, 'username': audello_username, 'password': audello_password},
+				'dataType': 'jsonp',
+				'success': function(response) {
+					if(response.success == true) {
+						WPAudelloRemoteDialog.insert(response.embed_code, $('#collection_chooser .active').prop('id').replace('collection-list-', '').slice(0, -1), plugin_url);
+					} else {
+						alert('There has been an error!\r\r'+response.message);
+					}
+				},
+				'error': function() {
+					alert('Unfortunately this collection could not be embedded properly. Please check your Audello details and then try again!');
+				}
+			});
+		});
+		
+		$('#list_files').delegate('.wp_audello_actions a', 'click', function(event) {
+			if(event) event.stopPropagation();
+		});
+		
+		$('#list_folders').delegate('li[data-folder-id] a', 'click', function(event) {
+			var id = $(this).parent('li').attr('data-folder-id') || 0;
+			loadFolder(id);
+			return false;
+		});
+		
+		$('#collection_chooser span').click(function() {
+			switchType($(this).attr('id').replace('collection-list-', ''));
+			return false;
+		});
+				
+		var lists = $('.list_collections'), callbacks = {
+			'files': function() {
+				loadFolder(0);
+			},
+			'podcasts': function() {
+				loadCollections('podcasts');
+			},
+			'playlists': function() {
+				loadCollections('playlists');
+			},
+			'audiobars': function() {
+				loadCollections('audiobars');
+			},
+			'splittests': function() {
+				loadCollections('splittests');
+			}
+		};
+		
+		var switchType = function(type) {
+			if(!type) type = 'files';
+			
+			// Reset the left-most column
+			$('#collection_chooser span').removeClass('active');
+			$('#collection-list-'+type).addClass('active');
+			
+			// Display the appropriate second column
+			lists.css('display', 'none');
+			$('#list_'+type).css('display', 'block');
+			
+			// Display the appropriate third column
+			if(type === 'files') {
+				$('#list_files, #list_folders').css('display', 'block');
+			} else {
+				$('#list_files, #list_folders').css('display', 'none');
+			}
+			
+			// And callback?
+			if(typeof callbacks[type] === 'function') callbacks[type]();
+		};
+		
+		var loadCollections = function(type) {
+			
+			var go = function() {
+				//
+			};
+			
+			if($('#list_'+type+' ul:empty').length === 1) {
+				$('#wp_audello_form').spinner({
+					'img': '../images/spinner-dark.gif',
+					'position': 'center',
+					'width': 20,
+					'height': 21,
+					'hide': true
+				});
+				
+				$.ajax({
+					'url': audello_api,
+					'data': {'responseType': 'jsonp', 'method': 'collections-list', 'appIntegration': true, 'username': audello_username, 'password': audello_password},
+					'dataType': 'jsonp',
+					'success': function(response) {
+						// Remove the spinner
+						$('#wp_audello_form').spinner('close');
+						
+						if(response.success == true) {
+							$.each(response.collections, function(idx, collections) {
+								$.each(collections.children, function(cidx, collection) {
+									var el = $('<li data-collection-id="'+collection.id+'"><span class="collection-name">'+collection.name+'</span><input type="button" value="Embed into post" class="mceButton"></li>');
+									el.appendTo($('#list_'+collection.type+'s ul'));
+								});
+							});
+							go();
+						} else {
+							//
+						}
+					}
+				});
+			} else {
+				go();
+			}
+		};
+		
+		var loadFolder = function(folder_id) {
+			$('#wp_audello_form').spinner({
+				'img': '../images/spinner-dark.gif',
+				'position': 'center',
+				'width': 20,
+				'height': 21,
+				'hide': true
+			});
+			
+			$('#list_folders li.current').removeClass('current');
+			$('#list_folders li[data-folder-id="'+folder_id+'"]').addClass('current');
+			current_folder = folder_id;
+			
+			$.ajax({
+				'url': audello_api,
+				'data': {'responseType': 'jsonp', 'method': 'files-list', 'folder_id': folder_id, 'username': audello_username, 'password': audello_password},
+				'dataType': 'jsonp',
+				'success': function(response) {
+					// Remove the spinner
+					$('#wp_audello_form').spinner('close');
+					
+					if(response.success == true) {
+						// Add the Uncategorised folder
+						response.folders = response.folders || [];
+						response.folders.unshift({'id': '0', 'name': 'Uncategorised', 'files': response.uncategorised_files});
+						
+						var folder_arr = {}, subfolder_arr = {}, handled_subs = [];
+						
+						// Is an admin?
+						var allowedFolders = [];
+						if(!audello_permissions.isAdmin) {
+							allowedFolders = audello_permissions.assigned_folders;
+						}
+						
+						// Create the folders
+						$('#list_folders ul').empty();
+						$.each(response.folders, function(idx, folder) {
+							if(audello_permissions.isAdmin || allowedFolders.indexOf(parseInt(folder.id)) !== -1) {
+								if(folder.folder_id == 0) folder.folder_count = '';
+								var f = $('<li data-folder-id="'+folder.id+'" class="'+((current_folder == folder.folder_id || current_folder == folder.id) ? 'current' : '')+'"><a class="collection-name" href="remote_video.html?folder_id='+(folder.folder_id || folder.id)+'">'+(folder.folder_name || folder.name)+'</a></li>');
+								f.appendTo($('#list_folders ul'));	
+								folder.el = f;
+								folder_arr[folder.folder_id || folder.id] = folder;
+							}
+							if(folder.parent_id) subfolder_arr[folder.folder_id || folder.id] = folder;
+						});
+						
+						$.each(subfolder_arr, function(idx, folder) {
+							if(audello_permissions.isAdmin || allowedFolders.indexOf(parseInt(folder.id)) !== -1) {
+								var parent = $('#list_folders [data-folder-id="'+folder.parent_id+'"]'), depth = 0;
+								if(parent.length >= 1) {
+									
+									var search = folder.parent_id;
+									while(folder_arr[search].parent_id != null) {
+										search = folder_arr[search].parent_id;
+										depth++;
+									}
+									
+									folder.el.insertAfter(parent);
+									folder.el.addClass('subfolder subfolder-depth-'+depth);
+									handled_subs.push(idx);
+								}
+							}
+						});
+						
+						// Create the files list
+						$('#list_files').empty();
+						var count = 0;
+						$.each(response.files, function(idx, file) {
+							var thumb = response.apiData.baseRemoteS3+'/player/images/default-thumbnail.png'; // Default thumbnail
+							if(file.metadata && file.metadata.thumbnail) thumb = file.metadata.thumbnail; // File-specific thumbnail
+							if(file.thumbnail) thumb = file.thumbnail; // Thumbnail for this collection
+							if(thumb.indexOf('default-thumbnail.png') !== -1 && response.collection && response.collection.thumbnail) thumb = response.collection.thumbnail;
+							if(thumb[0] == '/') thumb = thumb.substring(1);
+							if(['http', 'data'].indexOf(thumb.substr(0, 4)) == -1) thumb = response.apiData.baseS3+'/'+thumb;
+							
+							var el = '';
+							el += '<div class="collection-row" data-file-id="'+file.id+'">';
+								el += '<div class="collection-row-inner">';
+								el += '<div class="collection-row-thumbnail">';
+									el += '<img class="collection-row-thumbnail-image" src="'+thumb+'" />';
+								el += '</div>';
+								el += '<div class="collection-row-name"><a class="wp_audello_insert_link" title="Insert: '+(file.name_mask || file.name)+'">'+(file.name_mask || file.name).substr(0, 25)+'</a></div>';
+								el += '<input type="button" value="Embed into post" class="mceButton">';
+								el += '</div>';
+							el += '</div>';
+							$(el).appendTo($('#list_files'));
+							count++;
+						});
+						
+						if(count == 0) {
+							$('<p>There are no files in this folder.<br /><br />Please choose another folder from the list to the left.</p>').appendTo($('#list_files'));
+						}
+						
+					} else {
+						alert('There has been an error!\r\r'+response.message);
+					}
+				},
+				'error': function() {
+					alert('Unfortunately the list of files could not be loaded. Please go to the Audello settings page to check your location, username and password and try again!');
+				}
+			});
+		};
+		
+		if(audello_permissions.isAdmin || audello_permissions.perm_files) {
+			loadFolder(current_folder);
+		} else if(audello_permissions.perm_podcasts) {
+			switchType('podcasts');
+		} else if(audello_permissions.perm_playlists) {
+			switchType('playlists');
+		} else if(audello_permissions.perm_audiobars) {
+			switchType('audiobars');
+		} else if(audello_permissions.perm_splittests) {
+			switchType('splittests');
+		}
+	});
+	</script>
+</head>
+<body>
+	
+	<form name="source" action="#" id="wp_audello_form">
+	
+		<div id="collection_chooser">
+			<span id="collection-list-files" class="active">All audio files</span>
+			<span id="collection-list-podcasts">Podcasts</span>
+			<span id="collection-list-playlists">Playlists</span>
+			<span id="collection-list-audiobars">Audio bars</span>
+			<span id="collection-list-splittests">Split tests</span>
+		</div>
+
+		<div id="list_folders" class="list_collections"><ul></ul></div>
+		
+		<div id="list_files" class="list_collections_files"></div>
+		
+		<div id="list_podcasts" class="list_collections list_collections_full" style="display:none;"><ul></ul></div>
+		<div id="list_playlists" class="list_collections list_collections_full" style="display:none;"><ul></ul></div>
+		<div id="list_audiobars" class="list_collections list_collections_full" style="display:none;"><ul></ul></div>
+		<div id="list_splittests" class="list_collections list_collections_full" style="display:none;"><ul></ul></div>
+		
+		<div style="clear:both;"></div>
+
+		<div class="controls">
+			<input type="button" id="cancel" name="cancel" value="Cancel" onclick="tinyMCEPopup.close();" />
+			<input type="button" id="to" name="to" value="Go to Audello" onclick="window.open(tinyMCEPopup.getWindowArg('audello_location'));" class="mceButton" />
+		</div>
+	</form>
+</body>
+</html>
